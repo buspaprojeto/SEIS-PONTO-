@@ -6,10 +6,9 @@ from Models.Reserva import Reserva
 from Controllers.ReservaController import incluir_reserva, consultar_reservas, excluir_reserva
 from Controllers.PassageiroController import consultar_passageiros
 from Controllers.AssentoController import consultar_assentos
-from Views.utils import set_background
 
 def show_reserva_page():
-    set_background('assets/reserva.jpg')
+    
     st.title('Sistema de Reservas')
     
     operacao = st.sidebar.selectbox("Operações Reserva", ["Registrar", "Consultar", "Cancelar"])

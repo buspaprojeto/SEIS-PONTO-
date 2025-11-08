@@ -8,10 +8,9 @@ from Controllers.CoordenadorController import (
     excluir_coordenador, 
     alterar_coordenador
 )
-from Views.utils import set_background
 
 def show_coordenador_page():
-    set_background('assets/coordenador.jpg')
+    
     st.title('Cadastro de Coordenadores')
     
     operacao = st.sidebar.selectbox("Operações Coordenador", ["Incluir", "Consultar", "Excluir", "Alterar"])
@@ -62,7 +61,30 @@ def show_coordenador_page():
         else:
             st.info("Nenhum Coordenador para excluir.")
             
-    # Lógica de Alterar (análoga à do projeto original)
     elif operacao == "Alterar":
-        # ... (Implementação omitida por brevidade, mas segue o padrão do PageFuncionario/PageProduto original)
-        st.info("Implementar lógica de Alterar")
+        st.header("Alterar Coordenador")
+        
+        # Mostrar coordenadores existentes
+        coordenadores = consultar_coordenadores()
+        if coordenadores:
+            df = pd.DataFrame(coordenadores, columns=["Id", "Nome", "Número"])
+            st.table(df)
+            
+            with st.form(key="alterar_coordenador_form"):
+                coordenador = Coordenador(0, "", 0)
+                
+                coordenador.set_id(st.number_input("ID do Coordenador a alterar:", min_value=1, step=1))
+                coordenador.set_nome(st.text_input("Novo Nome do Coordenador:"))
+                coordenador.set_numero(st.number_input("Novo Número de Contato:", min_value=0))
+                
+                if st.form_submit_button("Alterar Coordenador"):
+                    try:
+                        if alterar_coordenador(coordenador):
+                            st.success(f"Coordenador com ID {coordenador.get_id()} alterado com sucesso!")
+                            st.rerun()
+                        else:
+                            st.error("Erro ao alterar Coordenador. Verifique se o ID existe e se os campos estão preenchidos corretamente.")
+                    except Exception as e:
+                        st.error(f"Erro: {e}")
+        else:
+            st.info("Nenhum Coordenador cadastrado para alterar.")

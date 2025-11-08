@@ -20,10 +20,10 @@ except Exception as e:
 # 3. Dicionário de páginas disponíveis
 PAGES = {
     "Coordenador": "Views.PageCoordenador", 
-    "Ônibus": "Views.PageOnibus", 
-    "Assento": "Views.PageAssento", # Assumindo a criação
-    "Passageiro": "Views.PagePassageiro", # Assumindo a criação
-    "Reservas": "Views.PageReserva" # Assumindo a criação
+    "Ônibus": "Views.PageOnibus",
+    "Passageiro": "Views.PagePassageiro",
+    "Mapa de Assentos (Clássico)": "Views.PageMapaAssentos",
+    "Mapa de Assentos (Moderno)": "Views.PageMapaAssentosModerno"
 }
 
 # 4. Função para carregar páginas de forma dinâmica
@@ -32,9 +32,24 @@ def load_page(page_name):
     try:
         module_path = PAGES[page_name]
         module = importlib.import_module(module_path)
-        # Formata o nome da função (ex: show_coordenador_page, show_onibus_page)
-        page_name_clean = page_name.lower().replace("ô", "o")
-        return getattr(module, f"show_{page_name_clean}_page")
+        
+        # Mapeamento especial para nomes de funções
+        function_mapping = {
+            "Mapa de Assentos (Clássico)": "show_mapa_assentos_page",
+            "Mapa de Assentos (Moderno)": "show_mapa_assentos_page",
+            "Coordenador": "show_coordenador_page",
+            "Ônibus": "show_onibus_page",
+            "Assento": "show_assento_page",
+            "Passageiro": "show_passageiro_page"
+        }
+        
+        function_name = function_mapping.get(page_name)
+        if not function_name:
+            # Fallback para o comportamento padrão
+            page_name_clean = page_name.lower().replace("ô", "o")
+            function_name = f"show_{page_name_clean}_page"
+            
+        return getattr(module, function_name)
     except (ImportError, AttributeError, KeyError) as e:
         st.error(f"Erro ao carregar a página {page_name}. Verifique se o arquivo e a função existem: {e}")
         return None

@@ -56,5 +56,43 @@ def passageiro_existe(id):
     finally:
         conexao.close()
 
-# Funções de Excluir e Alterar (Implementação padrão)
-# ...
+def excluir_passageiro(id):
+    conexao = conectaBD()
+    cursor = conexao.cursor()
+    try:
+        cursor.execute("DELETE FROM PASSAGEIRO WHERE Id = ?", (id,))
+        conexao.commit()
+        return True
+    except sqlite3.Error as e:
+        print(f"Erro ao excluir Passageiro: {e}")
+        return False
+    finally:
+        conexao.close()
+
+def alterar_passageiro(passageiro):
+    conexao = conectaBD()
+    cursor = conexao.cursor()
+    try:
+        # Permite assento_id ser Nulo (None)
+        assento_id = passageiro.get_assento_id()
+        if assento_id is not None and not assento_existe(assento_id):
+            raise ValueError(f"Assento com ID {assento_id} não existe.")
+
+        cursor.execute("""
+            UPDATE PASSAGEIRO 
+            SET numero = ?, assento_id = ?, Carteirinha = ?, nome = ?
+            WHERE Id = ?
+        """, (
+            passageiro.get_numero(),
+            assento_id,
+            passageiro.get_carteirinha(),
+            passageiro.get_nome(),
+            passageiro.get_id()
+        ))
+        conexao.commit()
+        return cursor.rowcount > 0
+    except (sqlite3.Error, ValueError) as e:
+        print(f"Erro ao alterar Passageiro: {e}")
+        return False
+    finally:
+        conexao.close()

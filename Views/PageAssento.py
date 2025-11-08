@@ -2,15 +2,14 @@
 import streamlit as st
 import pandas as pd
 from Models.Assento import Assento
-from Controllers.AssentoController import incluir_assento, consultar_assentos, excluir_assento, consultar_assentos_por_onibus
+from Controllers.AssentoController import incluir_assento, consultar_assentos, excluir_assento, consultar_assentos_por_onibus, alterar_assento
 from Controllers.OnibusController import consultar_onibus
-from Views.utils import set_background
 
 def show_assento_page():
-    set_background('assentoViews/Images/.jpg')
+    
     st.title('Gerenciamento de Assentos')
     
-    operacao = st.sidebar.selectbox("Operações Assento", ["Incluir", "Consultar", "Excluir"])
+    operacao = st.sidebar.selectbox("Operações Assento", ["Incluir", "Consultar", "Excluir", "Alterar"])
 
     # Carrega ônibus para a lista de seleção
     onibus_data = consultar_onibus()
@@ -82,3 +81,34 @@ def show_assento_page():
                     st.error("Falha ao excluir. O assento pode estar em uma reserva.")
         else:
             st.info("Nenhum assento para excluir.")
+            
+    elif operacao == "Alterar":
+        st.header("Alterar Assento")
+        assentos = consultar_assentos()
+        if assentos:
+            df = pd.DataFrame(assentos, columns=["ID", "ID Ônibus", "Motorista", "Localização", "Disponível"])
+            st.table(df)
+
+            with st.form(key="alterar_assento_form"):
+                id_alterar = st.number_input("ID do Assento a alterar:", min_value=1, step=1)
+                
+                # Carrega ônibus para seleção
+                selected_onibus_id = st.selectbox(
+                    "Selecione o novo Ônibus:",
+                    options=onibus_ids,
+                    format_func=lambda id: onibus_options.get(id, f"ID {id}")
+                )
+                
+                # Para a localização, vamos permitir selecionar de 0 a 40
+                localizacao = st.selectbox("Nova localização do assento:", options=range(41))
+                disponivel = st.checkbox("Disponível")
+
+                if st.form_submit_button("Alterar Assento"):
+                    assento = Assento(id_alterar, selected_onibus_id, str(localizacao), disponivel)
+                    if alterar_assento(assento):
+                        st.success(f"Assento {id_alterar} alterado com sucesso!")
+                        st.rerun()
+                    else:
+                        st.error("Erro ao alterar Assento. Verifique se o ID existe e se a nova localização está disponível.")
+        else:
+            st.info("Nenhum assento cadastrado para alterar.")

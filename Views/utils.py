@@ -1,23 +1,8 @@
 \
 # Views/utils.py
 import streamlit as st
-import base64
-from pathlib import Path
 
-def set_background(image_file):
-    """
-    Define o plano de fundo de uma página do Streamlit.
-    O usuário deve criar uma pasta 'assets' no diretório raiz e colocar as imagens lá.
-    Por exemplo: 'assets/coordenador.jpg'
-
-    Args:
-        image_file (str): O caminho para o arquivo de imagem.
-    """
-    image_path = Path(image_file)
-    if image_path.is_file():
-        with open(image_path, "rb") as f:
-            img = f.read()
-        b64 = base64.b64encode(img).decode()
+# Arquivo utilitário para funções comuns
         page_bg_img = f"""
         <style>
         [data-testid="stAppViewContainer"] {{

@@ -9,10 +9,9 @@ from Controllers.OnibusController import (
     alterar_onibus
 )
 from Controllers.CoordenadorController import consultar_coordenadores
-from Views.utils import set_background
 
 def show_onibus_page():
-    set_background('assets/onibus.jpg')
+    
     st.title('Cadastro de Ônibus')
     
     operacao = st.sidebar.selectbox("Operações Ônibus", ["Incluir", "Consultar", "Excluir", "Alterar"])
@@ -59,7 +58,40 @@ def show_onibus_page():
             else:
                 st.info("Nenhum Ônibus cadastrado.")
                 
-    # Lógicas de Excluir e Alterar (análogas à do PageCoordenador.py)
-    # ...
-    st.markdown("---")
-    st.markdown("*(A lógica completa para 'Excluir' e 'Alterar' seria implementada aqui.)*")
+    elif operacao == "Excluir":
+        st.header("Excluir Ônibus")
+        with st.form(key="excluir_onibus_form"):
+            id_onibus = st.number_input("ID do Ônibus a ser excluído:", min_value=1, step=1)
+            
+            if st.form_submit_button("Excluir Ônibus"):
+                if excluir_onibus(id_onibus):
+                    st.success(f"Ônibus {id_onibus} excluído com sucesso!")
+                else:
+                    st.error("Erro ao excluir Ônibus. Verifique se o ID existe.")
+
+    elif operacao == "Alterar":
+        st.header("Alterar Ônibus")
+        
+        if not coordenador_ids:
+            st.warning("⚠️ Cadastre Coordenadores antes de alterar Ônibus.")
+            return
+            
+        with st.form(key="alterar_onibus_form"):
+            onibus = Onibus(0, "", None)
+            
+            onibus.set_id(st.number_input("ID do Ônibus a ser alterado:", min_value=1, step=1))
+            onibus.set_motorista(st.text_input("Novo nome do Motorista:"))
+            
+            # Seleção da Chave Estrangeira
+            selected_coordenador_id = st.selectbox(
+                "Novo Coordenador Responsável:",
+                options=coordenador_ids,
+                format_func=lambda id: coordenador_options[id]
+            )
+            onibus.set_id_coordenador(selected_coordenador_id)
+            
+            if st.form_submit_button("Alterar Ônibus"):
+                if alterar_onibus(onibus):
+                    st.success(f"Ônibus {onibus.get_id()} alterado com sucesso!")
+                else:
+                    st.error("Erro ao alterar Ônibus. Verifique se o ID existe.")
