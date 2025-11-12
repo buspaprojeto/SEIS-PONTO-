@@ -6,7 +6,7 @@ def apply_custom_theme():
     st.markdown("""
         <style>
         :root {
-            --primary-color: #2c3e50;
+            --primary-color: #000000;
             --secondary-color: #3498db;
             --accent-color: #1abc9c;
             --danger-color: #e74c3c;
@@ -15,6 +15,8 @@ def apply_custom_theme():
             --light-bg: #f8f9fa;
             --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            --menu-bg: #000000;
+            --menu-text: #ffffff;
         }
 
         * {
@@ -26,7 +28,7 @@ def apply_custom_theme():
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #2c3e50;
+            color: #000000;
         }
 
         .stApp {
@@ -35,17 +37,17 @@ def apply_custom_theme():
 
         /* Sidebar */
         [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            background: #000000;
             box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
         }
 
         [data-testid="stSidebar"] > div:first-child {
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            background: #000000;
         }
 
         /* Header */
         h1 {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            background: linear-gradient(135deg, #000000 0%, #3498db 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -56,7 +58,7 @@ def apply_custom_theme():
         }
 
         h2 {
-            color: #2c3e50;
+            color: #000000;
             margin-bottom: 20px;
             border-bottom: 3px solid #1abc9c;
             padding-bottom: 12px;
@@ -64,7 +66,7 @@ def apply_custom_theme():
         }
 
         h3, h4, h5, h6 {
-            color: #2c3e50;
+            color: #000000;
             font-weight: 600;
             letter-spacing: -0.5px;
         }
@@ -109,6 +111,7 @@ def apply_custom_theme():
             font-size: 1em;
             transition: all 0.3s ease;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #000000;
         }
 
         input:focus, textarea:focus, select:focus {
@@ -116,6 +119,26 @@ def apply_custom_theme():
             background: white;
             box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
             outline: none;
+            color: #000000 !important;
+        }
+
+        input::placeholder {
+            color: #999999;
+        }
+
+        textarea::placeholder {
+            color: #999999;
+        }
+
+        /* Selectbox and dropdown options styling */
+        select option {
+            background: white;
+            color: #000000;
+        }
+
+        select option:checked {
+            background: #3498db;
+            color: #000000;
         }
 
         /* Buttons */
@@ -129,7 +152,7 @@ def apply_custom_theme():
             padding: 12px 28px !important;
             cursor: pointer;
             background: linear-gradient(135deg, #3498db 0%, #1abc9c 100%) !important;
-            color: white !important;
+            color: #000000 !important;
             font-size: 1em;
         }
 
@@ -156,7 +179,7 @@ def apply_custom_theme():
         /* Secondary Button (selectbox, etc) */
         [data-testid="stButton"] > button[type="secondary"] {
             background: #f8f9fa !important;
-            color: #2c3e50 !important;
+            color: #000000 !important;
             border: 2px solid #3498db;
         }
 
@@ -207,15 +230,15 @@ def apply_custom_theme():
 
         [data-testid="stExpander"] button {
             border-radius: 10px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #ecf0f1 100%);
+            background: #000000;
             border: none;
             transition: all 0.3s ease;
             font-weight: 600;
-            color: #2c3e50;
+            color: #ffffff;
         }
 
         [data-testid="stExpander"] button:hover {
-            background: linear-gradient(135deg, #ecf0f1 0%, #d5dbdb 100%);
+            background: #111111;
         }
 
         /* Column */
@@ -248,6 +271,19 @@ def apply_custom_theme():
             background: white;
             border-radius: 10px;
             border: 2px solid #ecf0f1;
+            color: #000000 !important;
+        }
+
+        [data-testid="stSelectbox"] [role="option"],
+        [data-testid="stSelectbox"] [role="listbox"] {
+            background: white !important;
+            color: #000000 !important;
+        }
+
+        [data-testid="stSelectbox"] [role="option"][aria-selected="true"],
+        [data-testid="stSelectbox"] [aria-selected="true"] {
+            background: #3498db !important;
+            color: #000000 !important;
         }
 
         /* Table */
@@ -292,11 +328,16 @@ def apply_custom_theme():
             transform: translateY(-4px);
         }
 
+        /* Markdown containers em geral (garante texto preto sobre fundo claro) */
+        [data-testid="stMarkdownContainer"] {
+            color: #000000 !important;
+        }
+
         /* Sidebar text */
         [data-testid="stSidebar"] p, 
         [data-testid="stSidebar"] span,
         [data-testid="stSidebar"] label {
-            color: #ecf0f1 !important;
+            color: #ffffff !important;
         }
 
         [data-testid="stSidebar"] h1,
@@ -312,7 +353,7 @@ def apply_custom_theme():
 
         [data-testid="stSelectbox"] > label {
             font-weight: 600;
-            color: white;
+            color: #000000;
             letter-spacing: 0.5px;
         }
         </style>
